@@ -14,9 +14,20 @@ class PlayerReaderStub:
 
 class TestStatistics(unittest.TestCase):
     def setUp(self):
-        self.players = PlayerReaderStub.get_players()
+        self._reader = PlayerReaderStub()
+        self.players = self._reader.get_players()
         self.stats = Statistics(PlayerReaderStub())
 
     def test_player_is_found_correctly(self):
-        self.assertAlmostEqual(self.stats.search("Semenko"),
-                                Player("Semenko", "EDM", 4, 12))
+        self.assertEqual(str(self.stats.search("Semenko")),
+                                "Semenko EDM 4 + 12 = 16")
+
+    def test_player_not_found_returns_none(self):
+        self.assertEqual(self.stats.search("Non-existent"), None)
+
+    def test_nonexistent_team_returns_empty_list(self):
+        self.assertEqual(self.stats.team("Non-existent"), [])
+
+    def test_top_score_is_correct(self):
+        self.assertEqual(str(self.stats.top_scorers(1)[0]),
+                                "Gretzky EDM 35 + 89 = 124")
