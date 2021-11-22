@@ -1,65 +1,52 @@
 *** Settings ***
 Resource  resource.robot
+Resource  login_resource.robot
 Suite Setup  Open And Configure Browser
 Suite Teardown  Close Browser
 Test Setup  Reset And Go To Register Page
 
 *** Test Cases ***
 Register With Valid Username And Password
-    Set Username  username
-    Set Password  v4lidpass
-    Set Password Confirmation  v4lidpass
-    Submit Credentials
+    Input Registration Credentials  username  v4lidpass
+    Submit Registration
     Welcome Page Should Be Open
 
 Register With Too Short Username And Valid Password
-    Set Username  a
-    Set Password  v4lidpass
-    Set Password Confirmation  v4lidpass
-    Submit Credentials
+    Input Registration Credentials  a  v4lidpass
+    Submit Registration
     Register Should Fail With Message  Username must be at least 3 characters long and consist of letters a-z
 
 Register With Valid Username And Too Short Password
-    Set Username  username
-    Set Password  sh0rt
-    Set Password Confirmation  sh0rt
-    Submit Credentials
+    Input Registration Credentials  username  sh0rt
+    Submit Registration
     Register Should Fail With Message  Password must be at least 8 characters and can't be only letters
 
 Register With Nonmatching Password And Password Confirmation
     Set Username  username
     Set Password  password123
     Set Password Confirmation  password456
-    Submit Credentials
+    Submit Registration
     Register Should Fail With Message  Passwords do not match
+
+Login After Successful Registration
+    Input Registration Credentials  username  v4lidpass
+    Submit Registration
+    Go To Login Page
+    Set Username  username
+    Set Password  v4lidpass
+    Submit Credentials
+    Login Should Succeed
+    
+Login After Failed Registration
+    Input Registration Credentials  a  password123
+    Submit Registration
+    Go To Login Page
+    Set Username  a
+    Set Password  password123
+    Submit Credentials
+    Login Should Fail With Message  Invalid username or password
 
 *** Keywords ***
 Reset And Go To Register Page
     Reset Application
     Go To  ${REGISTER URL}
-
-Welcome Page Should Be Open
-    Title Should Be  Welcome to Ohtu Application!
-
-Register Should Fail With Message
-    [Arguments]  ${message}
-    Register Page Should Be Open
-    Page Should Contain  ${message}
-
-Register Page Should Be Open
-    Title Should Be  Register
-
-Set Username
-    [Arguments]  ${username}
-    Input Text  username  ${username}
-
-Set Password
-    [Arguments]  ${username}
-    Input Password  password  ${username}
-
-Set Password Confirmation
-    [Arguments]  ${password confirmation}
-    Input Password  password_confirmation  ${password confirmation}
-
-Submit Credentials
-    Click Button  Register
