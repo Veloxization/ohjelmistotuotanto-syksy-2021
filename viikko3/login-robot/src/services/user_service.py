@@ -1,5 +1,6 @@
 from entities.user import User
 import re
+import sys, pdb
 
 class UserInputError(Exception):
     pass
@@ -42,3 +43,6 @@ class UserService:
 
         if len(password) < 8:
             raise UserInputError("Password must be at least 8 characters")
+
+        if re.match(r"^[A-z]+$", password):
+            raise UserInputError("Password must contain more than just letters")

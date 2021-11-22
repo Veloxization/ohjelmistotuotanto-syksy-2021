@@ -12,7 +12,7 @@ Login With Incorrect Password
     Output Should Contain  Invalid username or password
 
 Login With Nonexistent Username
-    Input Credentials  nonexistester  nothing
+    Input Credentials  nonexistester  nothing123
     Output Should Contain  Invalid username or password
 
 *** Keywords ***
