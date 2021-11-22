@@ -1,6 +1,5 @@
 from entities.user import User
 import re
-import sys, pdb
 
 class UserInputError(Exception):
     pass
