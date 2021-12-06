@@ -64,6 +64,9 @@ class Kayttoliittyma:
         return self._syote_kentta.get()
 
     def _suorita_komento(self, komento):
+        self._komennot[Komento.SUMMA] = Summa(self._sovellus, self._lue_syote)
+        self._komennot[Komento.EROTUS] = Erotus(self._sovellus, self._lue_syote)
+        self._komennot[Komento.NOLLAUS] = Nollaus(self._sovellus, self._lue_syote)
         komento_olio = self._komennot[komento]
         komento_olio.suorita()
         self._komennot[Komento.KUMOA] = Kumoa(self._sovellus, komento_olio)
