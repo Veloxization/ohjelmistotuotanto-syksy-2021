@@ -17,7 +17,7 @@ class Kayttoliittyma:
             Komento.SUMMA: Summa(sovellus, self._lue_syote),
             Komento.EROTUS: Erotus(sovellus, self._lue_syote),
             Komento.NOLLAUS: Nollaus(sovellus, self._lue_syote),
-            Komento.KUMOA: None
+            Komento.KUMOA: Kumoa(sovellus, None)
         }
 
     def kaynnista(self):
@@ -66,6 +66,7 @@ class Kayttoliittyma:
     def _suorita_komento(self, komento):
         komento_olio = self._komennot[komento]
         komento_olio.suorita()
+        self._komennot[Komento.KUMOA] = Kumoa(self._sovellus, komento_olio)
         self._kumoa_painike["state"] = constants.NORMAL
 
         if self._sovellus.tulos == 0:
@@ -80,6 +81,7 @@ class Summa:
     def __init__(self, sovellus, metodi):
         self._sovellus = sovellus
         self._metodi = metodi
+        self.edellinen_arvo = sovellus.tulos
 
     def suorita(self):
         return self._sovellus.plus(int(self._metodi()))
@@ -88,6 +90,7 @@ class Erotus:
     def __init__(self, sovellus, metodi):
         self._sovellus = sovellus
         self._metodi = metodi
+        self.edellinen_arvo = sovellus.tulos
 
     def suorita(self):
         return self._sovellus.miinus(int(self._metodi()))
@@ -96,6 +99,15 @@ class Nollaus:
     def __init__(self, sovellus, metodi):
         self._sovellus = sovellus
         self._metodi = metodi
+        self.edellinen_arvo = sovellus.tulos
 
     def suorita(self):
         return self._sovellus.nollaa()
+
+class Kumoa:
+    def __init__(self, sovellus, edellinen_olio):
+        self._sovellus = sovellus
+        self._edellinen_olio = edellinen_olio
+
+    def suorita(self):
+        self._sovellus.aseta_arvo(self._edellinen_olio.edellinen_arvo)
