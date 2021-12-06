@@ -68,13 +68,13 @@ class Kayttoliittyma:
         komento_olio.suorita()
         self._kumoa_painike["state"] = constants.NORMAL
 
-        if self._sovelluslogiikka.tulos == 0:
+        if self._sovellus.tulos == 0:
             self._nollaus_painike["state"] = constants.DISABLED
         else:
             self._nollaus_painike["state"] = constants.NORMAL
 
         self._syote_kentta.delete(0, constants.END)
-        self._tulos_var.set(self._sovelluslogiikka.tulos)
+        self._tulos_var.set(self._sovellus.tulos)
 
 class Summa:
     def __init__(self, sovellus, metodi):
