@@ -108,6 +108,7 @@ class Kumoa:
     def __init__(self, sovellus, edellinen_olio):
         self._sovellus = sovellus
         self._edellinen_olio = edellinen_olio
+        self.edellinen_arvo = sovellus.tulos
 
     def suorita(self):
-        self._sovellus.aseta_arvo(self._edellinen_olio.edellinen_arvo)
+        return self._sovellus.aseta_arvo(self._edellinen_olio.edellinen_arvo)
