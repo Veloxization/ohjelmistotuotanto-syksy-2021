@@ -16,7 +16,7 @@ class Kayttoliittyma:
         self._komennot = {
             Komento.SUMMA: Summa(sovellus, self._lue_syote),
             Komento.EROTUS: Erotus(sovellus, self._lue_syote),
-            Komento.NOLLAUS: Nollaus(sovellus),
+            Komento.NOLLAUS: Nollaus(sovellus, self._lue_syote),
             Komento.KUMOA: None
         }
 
@@ -60,42 +60,42 @@ class Kayttoliittyma:
         self._nollaus_painike.grid(row=2, column=2)
         self._kumoa_painike.grid(row=2, column=3)
 
-    def _suorita_komento(self, komento):
-        komento = self._komennot[komento]
-        komento.suorita()
+    def _lue_syote(self):
+        return self._syote_kentta.get()
 
+    def _suorita_komento(self, komento):
+        komento_olio = self._komennot[komento]
+        komento_olio.suorita()
         self._kumoa_painike["state"] = constants.NORMAL
 
-        if self._sovellus.tulos == 0:
+        if self._sovelluslogiikka.tulos == 0:
             self._nollaus_painike["state"] = constants.DISABLED
         else:
             self._nollaus_painike["state"] = constants.NORMAL
 
         self._syote_kentta.delete(0, constants.END)
-        self._tulos_var.set(self._sovellus.tulos)
-
-    def _lue_syote(self):
-        return self._syote_kentta.get()
+        self._tulos_var.set(self._sovelluslogiikka.tulos)
 
 class Summa:
-    def __init__(self, sovellus, syote):
+    def __init__(self, sovellus, metodi):
         self._sovellus = sovellus
-        self._syote = syote
+        self._metodi = metodi
 
     def suorita(self):
-        return self._sovellus.plus(self._syote)
+        return self._sovellus.plus(self._metodi)
 
 class Erotus:
-    def __init__(self, sovellus, syote):
+    def __init__(self, sovellus, metodi):
         self._sovellus = sovellus
-        self._syote = syote
+        self._metodi = metodi
 
     def suorita(self):
-        return self._sovellus.miinus(self._syote)
+        return self._sovellus.miinus(self._metodi)
 
 class Nollaus:
-    def __init__(self, sovellus):
+    def __init__(self, sovellus, metodi):
         self._sovellus = sovellus
+        self._metodi = metodi
 
     def suorita(self):
         return self._sovellus.nollaa()
