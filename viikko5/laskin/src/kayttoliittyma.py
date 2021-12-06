@@ -82,7 +82,7 @@ class Summa:
         self._metodi = metodi
 
     def suorita(self):
-        return int(self._sovellus.plus(self._metodi()))
+        return self._sovellus.plus(int(self._metodi()))
 
 class Erotus:
     def __init__(self, sovellus, metodi):
@@ -90,7 +90,7 @@ class Erotus:
         self._metodi = metodi
 
     def suorita(self):
-        return int(self._sovellus.miinus(self._metodi()))
+        return self._sovellus.miinus(int(self._metodi()))
 
 class Nollaus:
     def __init__(self, sovellus, metodi):
